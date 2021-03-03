@@ -1,0 +1,15 @@
+version: "3.6"
+
+networks:
+  discord:
+    driver: bridge
+
+services:
+  broadcaster:
+    container_name: chroma_broadcaster
+    restart: unless-stopped
+    build: .
+    ports:
+      - 8199:8199
+    networks:
+      - discord
