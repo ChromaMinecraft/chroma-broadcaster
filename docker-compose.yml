@@ -6,10 +6,13 @@ networks:
 
 services:
   broadcaster:
+    image: ghcr.io/chromaminecraft/chroma-broadcaster:main
     container_name: chroma_broadcaster
-    restart: unless-stopped
-    build: .
+    environment:
+      - FILE_PATH=cron.json
     ports:
       - 8199:8199
     networks:
       - discord
+    volumes:
+      - ./:/static

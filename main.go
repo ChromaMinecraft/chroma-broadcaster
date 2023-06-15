@@ -7,11 +7,13 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/robfig/cron/v3"
 )
 
 type jobs struct {
+	Name  string     `json:"name"`
 	Query string     `json:"query"`
 	URL   string     `json:"url"`
 	Data  dataObject `json:"data"`
@@ -19,6 +21,7 @@ type jobs struct {
 
 type dataObject struct {
 	Username string        `json:"username"`
+	Content  string        `json:"content"`
 	Embeds   []embedObject `json:"embeds"`
 }
 
@@ -36,7 +39,19 @@ type embedFooterObject struct {
 func main() {
 	var port string = ":8199"
 
-	file, _ := ioutil.ReadFile("./cron.json")
+	filePath := os.Getenv("FILE_PATH")
+	fmt.Println("load cron file at:", filePath)
+
+	if filePath == "" {
+		log.Fatalln("FILE_PATH environment variable not set")
+		return
+	}
+
+	file, err := ioutil.ReadFile("/static/" + filePath)
+	if err != nil {
+		log.Fatalln("error reading file: ", err)
+		return
+	}
 
 	var jobList []jobs
 	json.Unmarshal([]byte(file), &jobList)
@@ -46,7 +61,7 @@ func main() {
 
 	for _, each := range jobList {
 		dataMarshal, _ := json.Marshal(each.Data)
-
+		log.Printf("add cron job: %s, %s", each.Name, each.Query)
 		c.AddFunc(each.Query, func() { webhookRequest(each.URL, dataMarshal) })
 	}
 
@@ -69,12 +84,17 @@ func webhookRequest(url string, data []byte) {
 	body := bytes.NewBuffer(data)
 
 	req, err := http.NewRequest("POST", url, body)
+	if err != nil {
+		log.Printf("http NewRequest error: %v", err)
+		return
+	}
 	req.Header.Set("Content-type", "application/json")
 
 	client := &http.Client{}
 	res, err := client.Do(req)
 	if err != nil {
-		panic(err)
+		log.Printf("http client Do error: %v", err)
+		return
 	}
 
 	defer res.Body.Close()

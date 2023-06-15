@@ -1,19 +1,11 @@
 [
   {
-    "query": "0 */24 * * *",
-    "url": "https://discord.com/api/webhooks/773828748792430592/VXTNZ-E-z_gsZo3SgqE8mNj-HeslPAmYeviSapFJ4jZyJO1OhsdMlWsvDy-Q31pyENCK",
+    "name": "Every minute run checker information",
+    "query": "* * * * *",
+    "url": "https://discord.com/api/webhooks/1118766708296011817/aN7UCxHMmr5bF1dTTLPqaVXhl0cbrYVqBxmo2nr7dO7o6YDfFZiXJhNNPrLcByJPNsXu",
     "data": {
-      "username": "Chroma Broadcast",
-      "embeds": [
-        {
-          "color": 16711680,
-          "title": "Channel Information",
-          "description": "Pesan yang berhubungan dengan **Chroma Minecraft** di channel ini akan kami hiraukan. Silahkan gunakan <#773457432084742175> jika ada informasi yang ingin disampaikan. \n Terima Kasih.",
-          "footer": {
-            "text": "tags: broadcast, minecraft"
-          }
-        }
-      ]
+      "username": "Hooker",
+      "content": "Checking..."
     }
   }
 ]
