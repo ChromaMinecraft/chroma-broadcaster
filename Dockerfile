@@ -14,7 +14,8 @@ COPY go.sum .
 
 RUN go mod download
 
-COPY . .
+COPY *.go .
+COPY **/*.go .
 
 RUN go build -o app .
 
